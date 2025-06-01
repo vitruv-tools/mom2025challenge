@@ -3,7 +3,8 @@ package tools.vitruv.methodologisttemplate.model;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import System_Decomposition.Configuration;
+import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
+import tools.vitruv.methodologisttemplate.model.persistence.JSONSystemDecompositionResourceFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,8 +15,6 @@ import java.util.HashMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-
-import tools.vitruv.methodologisttemplate.model.serialization.JSONSystemDecompositionResourceFactory;
 
 class JSONSystemDecompositionResourceTest {
     /**

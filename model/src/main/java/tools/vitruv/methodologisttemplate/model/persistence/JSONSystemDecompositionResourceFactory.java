@@ -1,4 +1,4 @@
-package tools.vitruv.methodologisttemplate.model.serialization;
+package tools.vitruv.methodologisttemplate.model.persistence;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
