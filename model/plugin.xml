@@ -7,19 +7,27 @@
 <plugin>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated model -->
-      <package
-            uri="http://vitruv.tools/methodologisttemplate/model"
-            class="tools.vitruv.methodologisttemplate.model.model.ModelPackage"
-            genModel="src/main/ecore/model.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated model2 -->
       <package
             uri="http://vitruv.tools/methodologisttemplate/model2"
             class="tools.vitruv.methodologisttemplate.model.model2.Model2Package"
             genModel="src/main/ecore/model2.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated model -->
+      <package
+            uri="https://mom2025.wp.imt.fr/mom-challenge/system_decomposition"
+            class="tools.vitruv.methodologisttemplate.model.System_Decomposition.ModelPackage"
+            genModel="src/main/ecore/model.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated system_decomposition -->
+      <package
+            uri="https://mom2025.wp.imt.fr/mom-challenge/system_decomposition"
+            class="System_Decomposition.System_DecompositionPackage"
+            genModel="src/main/ecore/system_decomposition.genmodel"/>
    </extension>
 
 </plugin>
