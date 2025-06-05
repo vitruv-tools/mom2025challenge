@@ -2,14 +2,23 @@ package tools.vitruv.methodologisttemplate.model;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
+import tools.vitruv.methodologisttemplate.model.persistence.ConfigurationDeserializer;
 import tools.vitruv.methodologisttemplate.model.persistence.JSONSystemDecompositionResourceFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 
 import org.eclipse.emf.common.util.URI;
@@ -27,18 +36,35 @@ class JSONSystemDecompositionResourceTest {
 
     /**
      * Uses a JSONSystemDecompositionResource to deserialize system_config.json.
+     * Serializes the resource afterwards to another path.
      */
     @Test
-    void testDeserialization() throws IOException {
+    void testDeserializationAndSerialization(@TempDir Path path) throws IOException {
         // Load the System Configuration.
         var resourceSet = new ResourceSetImpl();
         var resource = resourceSet.createResource(URI.createFileURI("resources/system_decomposition/system_config.json"));
         resource.load(new HashMap<>());
-
+        var configuration = (Configuration) resource.getContents().get(0);
         // Assert one config element.
         assertEquals(1, resource.getContents().size());
-        var configuration = (Configuration) resource.getContents().get(0);
+        checkConfigurationOf(configuration);
 
+        // Create a second resource. Store the configuration there and save it.
+        String tempPathName = path.toString() + "system_config.json";
+        var resource2 = resourceSet.createResource(URI.createFileURI(tempPathName));
+        resource2.getContents().add(configuration);
+        resource2.save(new HashMap<>());
+        resource2.unload();
+
+        // Copy the configuration.
+        Files.copy(Path.of(path.toString(), "system_config.json"), Path.of(path.toString(),"system_arch.json"));
+        // Create a third resource. Reload the configuration.
+        var resource3 = resourceSet.createResource(URI.createFileURI(path.toString() + "system_arch.json"));
+        resource3.load(new HashMap<>());
+        checkConfigurationOf((Configuration) resource3.getContents().get(0));
+    }
+
+    private Configuration checkConfigurationOf(Configuration configuration) {
         // Check configuration itself.
         assertEquals("SatAlphaV1", configuration.getId());
         assertEquals("Configuration for Satellite Alpha, Version 1", configuration.getDescription());
@@ -51,6 +77,7 @@ class JSONSystemDecompositionResourceTest {
         assertComponent(configuration, "SP001B", "SolarPanel_B", "SolarPanelComponent", 1, 75.2);
         assertComponent(configuration, "ANT001", "CommAntenna001", "AntennaComponent", 1, 20.0);
         assertComponent(configuration, "ANT002", "CommAntenna002", "AntennaComponent", 1, 20.0);
+        return configuration;
     }
 
     /**

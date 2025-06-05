@@ -10,10 +10,13 @@ import java.util.Map;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 
+import tools.vitruv.methodologisttemplate.model.System_Decomposition.CommonSystemBase;
 import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
 
 /**
@@ -34,10 +37,21 @@ public class JSONSystemDecompositionResource extends ResourceImpl {
     public JSONSystemDecompositionResource(URI uri) {
         super(uri);
         // Set up the parser.
-        var parserBuilder = new GsonBuilder();
-        parserBuilder.registerTypeAdapter(Configuration.class, new ConfigurationDeserializer());
-        parserBuilder.registerTypeAdapter(Configuration.class, new ConfigurationSerializer());
-        parser = parserBuilder.create();
+        parser = new GsonBuilder()
+            .registerTypeAdapter(Configuration.class, new ConfigurationDeserializer())
+            .addSerializationExclusionStrategy(new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                    var declaringClass = f.getDeclaringClass();
+                    return !CommonSystemBase.class.isAssignableFrom(declaringClass);
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            })
+            .create();
     }
 
     /**
@@ -60,11 +74,12 @@ public class JSONSystemDecompositionResource extends ResourceImpl {
      * @throws JsonIOException
      */
     @Override
-    protected void doSave(OutputStream output, Map<?, ?> options) throws JsonIOException {
+    protected void doSave(OutputStream output, Map<?, ?> options) throws IOException {
         var writer = new OutputStreamWriter(output);
-        var contents = getContents();
-        contents.forEach(rootElement -> 
-            parser.toJson((Configuration) rootElement, writer)
-        );
+        for (var rootElement: getContents()) {
+            String text = parser.toJson(rootElement);
+            writer.write(text);
+        }
+        writer.close();
     }
 }
