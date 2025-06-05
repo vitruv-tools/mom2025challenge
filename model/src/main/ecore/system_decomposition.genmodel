@@ -5,7 +5,7 @@
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="17.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
   <foreignModel>system_decomposition.ecore</foreignModel>
-  <genPackages prefix="System_Decomposition" disposableProviderFactory="true" ecorePackage="system_decomposition.ecore#/">
+  <genPackages prefix="System_Decomposition" disposableProviderFactory="true" ecorePackage="system_decomposition.ecore#/" basePackage="tools.vitruv.methodologisttemplate.model">
     <genClasses ecoreClass="system_decomposition.ecore#//Component">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute system_decomposition.ecore#//Component/quantity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute system_decomposition.ecore#//Component/name"/>

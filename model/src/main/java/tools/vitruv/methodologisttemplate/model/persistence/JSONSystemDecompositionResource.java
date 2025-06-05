@@ -1,7 +1,10 @@
 package tools.vitruv.methodologisttemplate.model.persistence;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
@@ -9,6 +12,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
 
 import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
 
@@ -32,6 +36,7 @@ public class JSONSystemDecompositionResource extends ResourceImpl {
         // Set up the parser.
         var parserBuilder = new GsonBuilder();
         parserBuilder.registerTypeAdapter(Configuration.class, new ConfigurationDeserializer());
+        parserBuilder.registerTypeAdapter(Configuration.class, new ConfigurationSerializer());
         parser = parserBuilder.create();
     }
 
@@ -47,5 +52,19 @@ public class JSONSystemDecompositionResource extends ResourceImpl {
         var contents = getContents();
         contents.clear();
         contents.add(configuration);
+    }
+
+    /**
+     * Uses the parser to serialize one (all) configurations.
+     * 
+     * @throws JsonIOException
+     */
+    @Override
+    protected void doSave(OutputStream output, Map<?, ?> options) throws JsonIOException {
+        var writer = new OutputStreamWriter(output);
+        var contents = getContents();
+        contents.forEach(rootElement -> 
+            parser.toJson((Configuration) rootElement, writer)
+        );
     }
 }

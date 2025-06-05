@@ -9,8 +9,8 @@ import com.google.gson.JsonParseException;
 
 import tools.vitruv.methodologisttemplate.model.System_Decomposition.Component;
 import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
-import tools.vitruv.methodologisttemplate.model.System_Decomposition.ModelFactory;
-import tools.vitruv.methodologisttemplate.model.System_Decomposition.ModelPackage;
+import tools.vitruv.methodologisttemplate.model.System_Decomposition.System_DecompositionFactory;
+import tools.vitruv.methodologisttemplate.model.System_Decomposition.System_DecompositionPackage;
 
 /**
  * A deserializer/converter of JSON to Configuration objects.
@@ -19,7 +19,7 @@ public class ConfigurationDeserializer implements JsonDeserializer<Configuration
     /**
      * Factory object to create model elements.
      */
-    private static final ModelFactory FACTORY = ModelPackage.eINSTANCE.getModelFactory();
+    private static final System_DecompositionFactory FACTORY = System_DecompositionPackage.eINSTANCE.getSystem_DecompositionFactory();
 
     @Override
     public Configuration deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)

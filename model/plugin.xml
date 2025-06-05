@@ -26,7 +26,7 @@
       <!-- @generated system_decomposition -->
       <package
             uri="https://mom2025.wp.imt.fr/mom-challenge/system_decomposition"
-            class="System_Decomposition.System_DecompositionPackage"
+            class="tools.vitruv.methodologisttemplate.model.System_Decomposition.System_DecompositionPackage"
             genModel="src/main/ecore/system_decomposition.genmodel"/>
    </extension>
 
