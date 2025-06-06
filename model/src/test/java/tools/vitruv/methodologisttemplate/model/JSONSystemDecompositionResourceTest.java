@@ -2,21 +2,17 @@ package tools.vitruv.methodologisttemplate.model;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
 import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
-import tools.vitruv.methodologisttemplate.model.persistence.ConfigurationDeserializer;
 import tools.vitruv.methodologisttemplate.model.persistence.JSONSystemDecompositionResourceFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -39,7 +35,7 @@ class JSONSystemDecompositionResourceTest {
      * Serializes the resource afterwards to another path.
      */
     @Test
-    void testDeserializationAndSerialization(@TempDir Path path) throws IOException {
+    void testDeserializationAndSerialization(@TempDir(cleanup = CleanupMode.ON_SUCCESS) Path path) throws IOException {
         // Load the System Configuration.
         var resourceSet = new ResourceSetImpl();
         var resource = resourceSet.createResource(URI.createFileURI("resources/system_decomposition/system_config.json"));
@@ -50,7 +46,7 @@ class JSONSystemDecompositionResourceTest {
         checkConfigurationOf(configuration);
 
         // Create a second resource. Store the configuration there and save it.
-        String tempPathName = path.toString() + "system_config.json";
+        String tempPathName = path.toString() + File.separator + "system_config.json";
         var resource2 = resourceSet.createResource(URI.createFileURI(tempPathName));
         resource2.getContents().add(configuration);
         resource2.save(new HashMap<>());
@@ -59,7 +55,7 @@ class JSONSystemDecompositionResourceTest {
         // Copy the configuration.
         Files.copy(Path.of(path.toString(), "system_config.json"), Path.of(path.toString(),"system_arch.json"));
         // Create a third resource. Reload the configuration.
-        var resource3 = resourceSet.createResource(URI.createFileURI(path.toString() + "system_arch.json"));
+        var resource3 = resourceSet.createResource(URI.createFileURI(path.toString() + File.separator + "system_arch.json"));
         resource3.load(new HashMap<>());
         checkConfigurationOf((Configuration) resource3.getContents().get(0));
     }

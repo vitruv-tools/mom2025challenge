@@ -19,11 +19,20 @@ import tools.vitruv.methodologisttemplate.model.System_Decomposition.System_Deco
 /**
  * A deserializer/converter of JSON to Configuration objects.
  */
-public class ConfigurationDeserializer implements JsonDeserializer<Configuration>, JsonSerializer<Configuration> {
+public class ConfigurationTypeAdapter implements JsonDeserializer<Configuration>, JsonSerializer<Configuration> {
     /**
      * Factory object to create model elements.
      */
     private static final System_DecompositionFactory FACTORY = System_DecompositionPackage.eINSTANCE.getSystem_DecompositionFactory();
+
+    private static final String CONFIGURATION_SYSTEM_ID = "system_id";
+    private static final String CONFIGURATION_DESCRIPTION = "description";
+    private static final String CONFIGURATION_MASS = "calculated_total_mass_kg";
+    private static final String COMPONENT_ID = "id";
+    private static final String COMPONENT_NAME = "name";
+    private static final String COMPONENT_TYPE = "type";
+    private static final String COMPONENT_QUANTITY = "quantity";
+    private static final String COMPONENT_MASS = "mass_kg_per_unit";
 
     @Override
     public Configuration deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
@@ -33,9 +42,9 @@ public class ConfigurationDeserializer implements JsonDeserializer<Configuration
         var configuration = FACTORY.createConfiguration();
 
         // Parse basic fields.
-        configuration.setId(object.get("system_id").getAsString());
-        configuration.setDescription(object.get("description").getAsString());
-        configuration.setMass_kg(object.get("calculated_total_mass_kg").getAsDouble());
+        configuration.setId(object.get(ConfigurationTypeAdapter.CONFIGURATION_SYSTEM_ID).getAsString());
+        configuration.setDescription(object.get(ConfigurationTypeAdapter.CONFIGURATION_DESCRIPTION).getAsString());
+        configuration.setMass_kg(object.get(ConfigurationTypeAdapter.CONFIGURATION_MASS).getAsDouble());
 
         // Parse component field.
         var componentArray = object.get("components").getAsJsonArray();
@@ -51,26 +60,27 @@ public class ConfigurationDeserializer implements JsonDeserializer<Configuration
         var component = FACTORY.createComponent();
 
         // Get and convert the relevant fields from object; set component fields.
-        component.setId(object.get("id").getAsString());
-        component.setName(object.get("name").getAsString());
-        component.setType(object.get("type").getAsString());
-        component.setQuantity(object.get("quantity").getAsLong());
-        component.setMass_kg(object.get("mass_kg_per_unit").getAsDouble());
+        component.setId(object.get(ConfigurationTypeAdapter.COMPONENT_ID).getAsString());
+        component.setName(object.get(ConfigurationTypeAdapter.COMPONENT_NAME).getAsString());
+        component.setType(object.get(ConfigurationTypeAdapter.COMPONENT_TYPE).getAsString());
+        component.setQuantity(object.get(ConfigurationTypeAdapter.COMPONENT_QUANTITY).getAsLong());
+        component.setMass_kg(object.get(ConfigurationTypeAdapter.COMPONENT_MASS).getAsDouble());
         return component;
     }
 
-    @Override
+   @Override
     public JsonElement serialize(Configuration config, Type typeOfSrc, JsonSerializationContext context) {
         // Create the main configuration object.
         var configObject = new JsonObject();
         // Add primitive fields.
-        configObject.addProperty("system_id", config.getId());
-        configObject.addProperty("description",config.getDescription());
-        configObject.addProperty("calculated_total_mass_kg", config.getMass_kg());
+        configObject.addProperty(ConfigurationTypeAdapter.CONFIGURATION_SYSTEM_ID, config.getId());
+        configObject.addProperty(ConfigurationTypeAdapter.CONFIGURATION_DESCRIPTION,config.getDescription());
+        configObject.addProperty(ConfigurationTypeAdapter.CONFIGURATION_MASS, config.getMass_kg());
 
         // Create array of components and fill it.
         var componentArray = new JsonArray();
         config.getComponents().forEach(component -> componentArray.add(serializeComponent(component)));
+        configObject.add("components", componentArray);
         return configObject;
     }
 
@@ -79,11 +89,11 @@ public class ConfigurationDeserializer implements JsonDeserializer<Configuration
         var componentObject = new JsonObject();
 
         // Add fields, and return.
-        componentObject.addProperty("id", component.getId());
-        componentObject.addProperty("name", component.getName());
-        componentObject.addProperty("type", component.getType());
-        componentObject.addProperty("quantity", component.getQuantity());
-        componentObject.addProperty("mass_kg_per_unit", component.getMass_kg());
+        componentObject.addProperty(ConfigurationTypeAdapter.COMPONENT_ID, component.getId());
+        componentObject.addProperty(ConfigurationTypeAdapter.COMPONENT_NAME, component.getName());
+        componentObject.addProperty(ConfigurationTypeAdapter.COMPONENT_TYPE, component.getType());
+        componentObject.addProperty(ConfigurationTypeAdapter.COMPONENT_QUANTITY, component.getQuantity());
+        componentObject.addProperty(ConfigurationTypeAdapter.COMPONENT_MASS, component.getMass_kg());
         return componentObject;
     }
 }
