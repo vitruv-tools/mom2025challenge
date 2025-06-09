@@ -1,0 +1,18 @@
+import java.io.File;
+
+import "https://mom2025.wp.imt.fr/mom-challenge/system_decomposition" as sd
+import "http://www.example.com/satellite" as pc
+
+reactions: pc3sd
+in reaction to changes in pc
+execute actions in sd
+
+reaction MassChange {
+    after attribute replaced at pc::Component[hasMass]
+    call changeMass(affectedEObject)
+}
+routine changeMass(pc::Component component) {
+    update{
+    println("routine called")
+    }
+}

@@ -7,10 +7,11 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.*;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.search.EntitySearcher;
 
 import java.io.File;
@@ -21,44 +22,28 @@ import java.util.Map;
 
 public class Owl2Ecore {
 
-    private static final Map<OWLClass, EClass> CLASSES = new HashMap<>();
-    private static final Map<OWLDataProperty, EAttribute> ATTRIBUTES = new HashMap<>();
+    private final Map<OWLClass, EClass> CLASSES = new HashMap<>();
+    private final Map<OWLDataProperty, EAttribute> ATTRIBUTES = new HashMap<>();
 
-    public static void main(String[] args) {
-        OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-        try {
-            final OWLOntology ontology = manager.loadOntologyFromOntologyDocument(new File("model/resources/part_catalogue/ontology.owl"));
-            var ePackage = EcoreFactory.eINSTANCE.createEPackage();
-            ePackage.setName("ontology");
-            ePackage.setNsPrefix("ontology");
-            ontology.nestedClassExpressions().forEach(it -> addClass(it.asOWLClass(), ePackage));
-            ontology.nestedClassExpressions().forEach(it -> addSuperClass(it.asOWLClass(), ontology));
-            ontology.getDataPropertiesInSignature(false).stream().forEach(it -> addProperties(it, ontology));
-            // in addition to the properties (which specify the ID), we also have the name, which is used in other
-            // models as well, but is not a property in the sense of the data properties
-            // therefore, we add a "name" property here to fill it with that name later
-            // and as that should only be defined once, we set it to the upmost class
-addNameAttribute();
-            var resSet = new ResourceSetImpl();
-            resSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-            var res = resSet.createResource(URI.createFileURI("model/src/main/ecore/ontology.ecore"));
-            res.getContents().add(ePackage);
-            res.save(Collections.emptyMap());
-            var model = resSet.createResource(URI.createFileURI("model/src/main/ecore/instance.xmi"));
-            handleInstances(ontology, model);
-            model.save(Collections.emptyMap());
-            // not working for now, so manual generation from an eclipse instance
-            // generateGenmodel(ePackage, resSet, "model/src/main/ecore/ontology.genmodel");
-        } catch (OWLOntologyCreationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+    public void convert(OWLOntology ontology, ResourceSet resourceSet, URI metamodelURI, URI modelURI) {
+        var ePackage = EcoreFactory.eINSTANCE.createEPackage();
+        ePackage.setName("ontology");
+        ePackage.setNsPrefix("ontology");
+        ontology.nestedClassExpressions().forEach(it -> addClass(it.asOWLClass(), ePackage));
+        ontology.nestedClassExpressions().forEach(it -> addSuperClass(it.asOWLClass(), ontology));
+        ontology.getDataPropertiesInSignature(false).stream().forEach(it -> addProperties(it, ontology));
+        // in addition to the properties (which specify the ID), we also have the name, which is used in other
+        // models as well, but is not a property in the sense of the data properties
+        // therefore, we add a "name" property here to fill it with that name later
+        // and as that should only be defined once, we set it to the upmost class
+        addNameAttribute();
+        var res = resourceSet.createResource(metamodelURI);
+        res.getContents().add(ePackage);
+        var model = resourceSet.createResource(modelURI);
+        handleInstances(ontology, model);
     }
 
-    private static void handleInstances(OWLOntology ontology, Resource model) {
+    private void handleInstances(OWLOntology ontology, Resource model) {
         for (OWLNamedIndividual individual : ontology.getIndividualsInSignature()) {
             // Assumption 1: an individual has one and only one type
             // create the appropriate EObject
@@ -76,12 +61,16 @@ addNameAttribute();
             });
             // after the "normal" attributes have been set, we have to still set the name attribute, i.e., the
             // one attribute that is still unset
-            eobject.eClass().getEAllAttributes().forEach(it -> {if (eobject.eGet(it) == null) {eobject.eSet(it, individual.getIRI().getShortForm());}});
+            eobject.eClass().getEAllAttributes().forEach(it -> {
+                if (eobject.eGet(it) == null) {
+                    eobject.eSet(it, individual.getIRI().getShortForm());
+                }
+            });
             model.getContents().add(eobject);
         }
     }
 
-    private static void addNameAttribute() {
+    private void addNameAttribute() {
         for (EClass eClass : CLASSES.values()) {
             // not very generic, as it assumes that there is no diamond inheritance
             if (eClass.getESuperTypes().isEmpty()) {
@@ -96,7 +85,7 @@ addNameAttribute();
     }
 
     // not working for now skipped, code manually created with eclipse
-    private static void generateGenmodel(EPackage ePackage, ResourceSet resourceSet, String genmodelPath) throws IOException {
+    private void generateGenmodel(EPackage ePackage, ResourceSet resourceSet, String genmodelPath) throws IOException {
         // Create GenModel
         GenModelFactory genModelFactory = GenModelFactory.eINSTANCE;
         GenModel genModel = genModelFactory.createGenModel();
@@ -122,7 +111,7 @@ addNameAttribute();
         genModel.generate(new BasicMonitor.Printing(System.out));
     }
 
-    private static void addClass(OWLClass owlClass, EPackage ePackage) {
+    private void addClass(OWLClass owlClass, EPackage ePackage) {
         EClass eClass = EcoreFactory.eINSTANCE.createEClass();
         if (ePackage.getNsURI() == null || ePackage.getNsURI().isEmpty()) {
             // remove the #
@@ -133,11 +122,11 @@ addNameAttribute();
         ePackage.getEClassifiers().add(eClass);
     }
 
-    private static void addSuperClass(OWLClass owlClass, OWLOntology ontology) {
+    private void addSuperClass(OWLClass owlClass, OWLOntology ontology) {
         ontology.getSubClassAxiomsForSubClass(owlClass).forEach(axiom -> CLASSES.get(owlClass).getESuperTypes().add(CLASSES.get(axiom.getSuperClass())));
     }
 
-    private static void addProperties(OWLDataProperty property, OWLOntology ontology) {
+    private void addProperties(OWLDataProperty property, OWLOntology ontology) {
         var eClass = CLASSES.get(ontology.getDataPropertyDomainAxioms(property).iterator().next().getDomain());
         var attribute = EcoreFactory.eINSTANCE.createEAttribute();
         attribute.setName(property.getIRI().getShortForm());
@@ -168,4 +157,6 @@ addNameAttribute();
         }
         eClass.getEStructuralFeatures().add(attribute);
     }
+
+
 }
