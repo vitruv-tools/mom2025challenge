@@ -12,11 +12,11 @@ Workflow {
         platformUri = workspaceRoot
     }
 
-    /* component = EcoreGenerator {
-        genModel = "platform:/resource/tools.vitruv.momchallenge.model/src/main/ecore/ontology.genmodel"
-        srcPath = "platform:/resource/tools.vitruv.momchallenge.model/target/generated-sources/ecore"
+    component = EcoreGenerator {
+        genModel = "platform:/resource/tools.vitruv.methodologisttemplate.model/src/main/ecore/system_decomposition.genmodel"
+        srcPath = "platform:/resource/tools.vitruv.methodologisttemplate.model/target/generated-sources/ecore"
         generateCustomClasses = false
-    } */
+    }
 
     /*component = EcoreGenerator {
         genModel = "platform:/resource/tools.vitruv.mom2025challenge.model/src/main/ecore/model2.genmodel"
