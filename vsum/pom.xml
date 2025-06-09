@@ -7,11 +7,11 @@
 
     <parent>
         <groupId>tools.vitruv</groupId>
-        <artifactId>tools.vitruv.methodologisttemplate</artifactId>
+        <artifactId>tools.vitruv.momchallenge</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>tools.vitruv.methodologisttemplate.vsum</artifactId>
+    <artifactId>tools.vitruv.momchallenge.vsum</artifactId>
 
     <name>Vsum</name>
     <description />
@@ -21,12 +21,12 @@
         <!-- project dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>tools.vitruv.methodologisttemplate.model</artifactId>
+            <artifactId>tools.vitruv.momchallenge.model</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>tools.vitruv.methodologisttemplate.consistency</artifactId>
+            <artifactId>tools.vitruv.momchallenge.consistency</artifactId>
             <version>${project.version}</version>
         </dependency>
 
