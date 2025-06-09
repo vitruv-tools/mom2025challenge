@@ -1,6 +1,6 @@
 package tools.vitruv.methodologisttemplate.vsum;
 
-import mir.reactions.pc3sd.Pc3sdChangePropagationSpecification;
+import mir.reactions.pc2sd.Pc2sdChangePropagationSpecification;
 import ontology.OntologyFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
@@ -40,7 +40,7 @@ public class VSUMExample {
     return new VirtualModelBuilder()
         .withStorageFolder(Path.of("vsum/target/vsumexample"))
         .withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(new TestUserInteraction()))
-        .withChangePropagationSpecifications(new Pc3sdChangePropagationSpecification())
+        .withChangePropagationSpecifications(new Pc2sdChangePropagationSpecification())
         .buildAndInitialize();
   }
 

@@ -38,27 +38,27 @@
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.change.atomic</artifactId>
-        <version>${vitruv.version}</version>
+        <version>3.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.change.composite</artifactId>
-        <version>${vitruv.version}</version>
+        <version>3.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.change.interaction</artifactId>
-        <version>${vitruv.version}</version>
+        <version>3.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.change.propagation</artifactId>
-        <version>${vitruv.version}</version>
+        <version>3.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.change.testutils.integration</artifactId>
-        <version>${vitruv.version}</version>
+        <version>3.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
@@ -68,12 +68,12 @@
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.framework.views</artifactId>
-        <version>${vitruv.version}</version>
+        <version>3.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>tools.vitruv</groupId>
         <artifactId>tools.vitruv.framework.vsum</artifactId>
-        <version>${vitruv.version}</version>
+        <version>3.2.0-SNAPSHOT</version>
       </dependency>
 
       <!-- external dependencies-->
