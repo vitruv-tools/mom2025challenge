@@ -81,7 +81,6 @@ class CSVRequirementSpecificationResourceTest {
         // requirement 
         assertEquals(id,   req.getRequirementID());
         assertEquals(desc, req.getDescription());
-        //assertEquals("",   req.getStatus());
 
         // constraint
         Constraint c = req.getConstraint();

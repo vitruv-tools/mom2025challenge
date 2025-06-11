@@ -39,7 +39,6 @@ public class CSVRequirementSpecificationResource extends ResourceImpl {
                 Requirement req = FACTORY.createRequirement();
                 req.setRequirementID(record.get("RequirementID"));
                 req.setDescription(record.get("Description"));
-                req.setStatus("");                     // status default empty
 
                 Constraint c = FACTORY.createConstraint();
                 c.setParameter(record.get("Parameter"));
