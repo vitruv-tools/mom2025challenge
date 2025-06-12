@@ -20,7 +20,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <!--
     the type of the value is Estring because the value could be Edouble, EInteger, or Estring. 
-    It depends on the Unit. Trandform it into specified type in Reactions.
+    It depends on the Unit. Transform it into specified type in Reactions.
     -->       
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>  
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Unit" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
