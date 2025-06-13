@@ -30,4 +30,12 @@
             genModel="src/main/ecore/system_decomposition.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated requirement_specification -->
+      <package
+            uri="http://www.example.org/requirement_specification"
+            class="tools.vitruv.methodologisttemplate.model.requirement_specification.Requirement_SpecificationPackage"
+            genModel="src/main/ecore/requirement_specification.genmodel"/>
+   </extension>
+
 </plugin>

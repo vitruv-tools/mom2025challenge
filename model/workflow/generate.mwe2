@@ -18,10 +18,10 @@ Workflow {
         generateCustomClasses = false
     }
 
-    /*component = EcoreGenerator {
-        genModel = "platform:/resource/tools.vitruv.mom2025challenge.model/src/main/ecore/model2.genmodel"
-        srcPath = "platform:/resource/tools.vitruv.mom2025challenge.model/target/generated-sources/ecore"
+    component = EcoreGenerator {
+        genModel = "platform:/resource/tools.vitruv.methodologisttemplate.model/src/main/ecore/requirement_specification.genmodel"
+        srcPath = "platform:/resource/tools.vitruv.methodologisttemplate.model/target/generated-sources/ecore"
         generateCustomClasses = false
-    }*/
+    }
 
 }

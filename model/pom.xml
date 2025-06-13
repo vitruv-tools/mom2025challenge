@@ -74,4 +74,9 @@
     <artifactId>gson</artifactId>
   </dependency>
 </dependencies>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-csv</artifactId>
+        <version>1.14.0</version>
+      </dependency>
+  </dependencies>
 </project>
