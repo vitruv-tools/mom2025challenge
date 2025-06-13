@@ -1,0 +1,43 @@
+import java.io.File;
+import tools.vitruv.methodologisttemplate.model.Ontology.OntologyPackage;
+
+import "https://mom2025.wp.imt.fr/mom-challenge/system_decomposition" as sd
+import "http://www.example.com/satellite" as pc
+
+reactions: sd2pc
+in reaction to changes in sd
+execute actions in pc
+
+reaction ComponentInsertedAsRoot {
+	after element sd::Component inserted in sd::Configuration[components]
+	call registerCorrespondence(newValue)
+}
+
+routine registerCorrespondence(sd::Component cmp) {
+    match {
+        val pc_components = retrieve many pc::Component corresponding to OntologyPackage.Literals.COMPONENT
+    }
+	update {
+	    for (pc_component : pc_components) {
+	        if (pc_component.componentID == cmp.id) {
+	            addCorrespondenceBetween(cmp, pc_component)
+	        }
+	    }
+	}
+}
+
+reaction MassChange {
+    after attribute replaced at sd::Component[mass_kg]
+    call changeMass(affectedEObject)
+}
+routine changeMass(sd::Component component) {
+    match {
+        val pc_component = retrieve pc::Component corresponding to component
+    }
+    update{
+        if (pc_component.hasMass != component.mass_kg){
+            pc_component.hasMass = component.mass_kg
+        }
+        (component.eContainer as tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration).mass_kg = (component.eContainer as tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration).components.map[mass_kg * quantity].reduce[p1, p2 | p1 + p2]
+    }
+}

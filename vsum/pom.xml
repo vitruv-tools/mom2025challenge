@@ -40,6 +40,11 @@
             <artifactId>tools.vitruv.momchallenge.consistency</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>tools.vitruv.momchallenge.viewtype</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- Vitruvius dependencies -->
         <dependency>
