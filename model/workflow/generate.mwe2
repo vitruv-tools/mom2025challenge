@@ -19,8 +19,15 @@ Workflow {
     }
 
     component = EcoreGenerator {
-            genModel = "platform:/resource/tools.vitruv.methodologisttemplate.model/src/main/ecore/ontology.genmodel"
-            srcPath = "platform:/resource/tools.vitruv.methodologisttemplate.model/target/generated-sources/ecore"
-            generateCustomClasses = false
-        }
+        genModel = "platform:/resource/tools.vitruv.methodologisttemplate.model/src/main/ecore/ontology.genmodel"
+        srcPath = "platform:/resource/tools.vitruv.methodologisttemplate.model/target/generated-sources/ecore"
+        generateCustomClasses = false
+    }
+      
+    component = EcoreGenerator {
+        genModel = "platform:/resource/tools.vitruv.methodologisttemplate.model/src/main/ecore/requirement_specification.genmodel"
+        srcPath = "platform:/resource/tools.vitruv.methodologisttemplate.model/target/generated-sources/ecore"
+        generateCustomClasses = false
+    }
+
 }
