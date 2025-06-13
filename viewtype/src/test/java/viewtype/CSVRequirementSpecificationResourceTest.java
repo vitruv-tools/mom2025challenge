@@ -1,13 +1,11 @@
-package tools.vitruv.methodologisttemplate.model;
+package viewtype;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
@@ -19,12 +17,12 @@ import org.junit.jupiter.api.io.TempDir;
 
 import tools.vitruv.methodologisttemplate.model.requirement_specification.Constraint;
 import tools.vitruv.methodologisttemplate.model.requirement_specification.Requirement;
-import tools.vitruv.methodologisttemplate.model.persistence.CSVRequirementSpecificationResourceFactory;
+import tools.vitruv.methodologisttemplate.viewtype.adapters.csv.CSVRequirementSpecificationResourceFactory;
 
 /**
  * Round-trip test for CSVRequirementSpecificationResource
  */
-class CSVRequirementSpecificationResourceTest {
+public class CSVRequirementSpecificationResourceTest {
 
     @BeforeAll
     static void registerFactory() {

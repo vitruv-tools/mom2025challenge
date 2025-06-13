@@ -1,10 +1,11 @@
-package tools.vitruv.methodologisttemplate.model.persistence;
+package tools.vitruv.methodologisttemplate.viewtype.adapters.csv;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.apache.commons.csv.*;
+import org.apache.commons.io.build.*;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 

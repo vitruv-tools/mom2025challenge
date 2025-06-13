@@ -1,4 +1,4 @@
-package model.ontology;
+package viewtype.ontology;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;

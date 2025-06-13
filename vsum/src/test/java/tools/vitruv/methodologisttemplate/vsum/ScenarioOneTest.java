@@ -26,7 +26,7 @@ import tools.vitruv.methodologisttemplate.viewtype.adapters.ontology.Owl2Ecore;
 /**
  * This class provides an example how to define and use a VSUM.
  */
-public class ScenarioOne extends AbstractVSUMExampleTest{
+public class ScenarioOneTest extends AbstractVSUMExampleTest{
 
   @Test
   void test(@TempDir Path tempDir) throws Exception {

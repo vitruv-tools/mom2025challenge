@@ -13,6 +13,7 @@ import tools.vitruv.framework.views.ViewTypeFactory;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.framework.vsum.VirtualModelBuilder;
 import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
+import tools.vitruv.methodologisttemplate.viewtype.adapters.csv.CSVRequirementSpecificationResourceFactory;
 import tools.vitruv.methodologisttemplate.viewtype.adapters.systemdecomposition.JSONSystemDecompositionResourceFactory;
 
 import java.nio.file.Path;
@@ -27,6 +28,7 @@ public abstract class AbstractVSUMExampleTest {
     static void setup() {
         Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
         Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("json", new JSONSystemDecompositionResourceFactory());
+        Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("csv", new CSVRequirementSpecificationResourceFactory());
         Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new XMIResourceFactoryImpl());
         Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
     }
