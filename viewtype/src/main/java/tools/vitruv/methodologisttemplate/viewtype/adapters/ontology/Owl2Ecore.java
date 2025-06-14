@@ -6,12 +6,10 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.*;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.search.EntitySearcher;
 import tools.vitruv.methodologisttemplate.model.Ontology.OntologyFactory;
+import uk.ac.manchester.cs.owl.owlapi.OWLLiteralImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +21,7 @@ public class Owl2Ecore {
 
     private final Map<OWLClass, EClass> CLASSES = new HashMap<>();
     private final Map<OWLDataProperty, EAttribute> ATTRIBUTES = new HashMap<>();
+    private final Map<OWLNamedIndividual, EObject> INSTANCES = new HashMap<>();
 
     public void convert(OWLOntology ontology, ResourceSet resourceSet, URI metamodelURI, URI modelURI) {
         var ePackage = EcoreFactory.eINSTANCE.createEPackage();
@@ -48,6 +47,7 @@ public class Owl2Ecore {
             // create the appropriate EObject
             var owltype = EntitySearcher.getTypes(individual, ontology).toList().get(0);
             EObject eobject = OntologyFactory.eINSTANCE.create(CLASSES.get(owltype));
+            INSTANCES.put(individual, eobject);
             ontology.getDataPropertyAssertionAxioms(individual).forEach(it -> {
                 var attribute = eobject.eClass().getEAllAttributes().stream().filter(its -> its.getName().equals(ATTRIBUTES.get(it.getProperty()).getName())).toList();
                 if (!attribute.isEmpty()) {
@@ -68,6 +68,38 @@ public class Owl2Ecore {
             model.getContents().add(eobject);
         }
     }
+
+    public void updateOntology(OWLOntologyManager manager, OWLOntology ontology) {
+        for (OWLNamedIndividual individual : INSTANCES.keySet()) {
+            var eobject = INSTANCES.get(individual);
+            ontology.getDataPropertyAssertionAxioms(individual).forEach(it -> {
+                var attribute = eobject.eClass().getEAllAttributes().stream().filter(its -> its.getName().equals(ATTRIBUTES.get(it.getProperty()).getName())).toList();
+                if (!eobject.eGet(attribute.get(0)).equals(it.getObject().getLiteral())) {
+                    System.out.println("Checking " + individual + " with property " + eobject.eGet(attribute.get(0)) + " " + it.getObject().getLiteral());
+                    // the value of the attribute has changed, so we need to adapt it in the ontology
+                    updateDataProperty(manager, ontology, individual,
+                            it.getProperty().asOWLDataProperty(),
+                            new OWLLiteralImpl(eobject.eGet(attribute.get(0)).toString(), it.getObject().getLang(), it.getObject().getDatatype()));
+                }
+            });
+        }
+    }
+
+
+    public void updateDataProperty(OWLOntologyManager manager, OWLOntology ontology,
+                                   OWLNamedIndividual individual, OWLDataProperty property, OWLLiteral newValue) {
+ OWLDataFactory factory = manager.getOWLDataFactory();
+
+ // Remove old values
+ ontology.dataPropertyAssertionAxioms(individual)
+ .filter(ax -> ax.getProperty().equals(property))
+ .forEach(ax -> manager.removeAxiom(ontology, ax));
+
+ // Add new value
+ OWLAxiom newAxiom = factory.getOWLDataPropertyAssertionAxiom(property, individual, newValue);
+ manager.addAxiom(ontology, newAxiom);
+    }
+
 
     private void addNameAttribute() {
         for (EClass eClass : CLASSES.values()) {
