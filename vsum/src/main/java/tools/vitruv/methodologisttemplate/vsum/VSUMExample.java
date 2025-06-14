@@ -16,21 +16,7 @@ import tools.vitruv.framework.vsum.VirtualModel;
  * This class provides an example how to define and use a VSUM.
  */
 public class VSUMExample {
-  public static void main(String[] args) {
-    VirtualModel vsum = createDefaultVirtualModel();
-    CommittableView view = getDefaultView(vsum).withChangeDerivingTrait();
-    modifyView(view, (CommittableView v) -> {
-      v.getRootObjects().add(ModelFactory.eINSTANCE.createSystem());
-    });
-  }
-
-  private static VirtualModel createDefaultVirtualModel() {
-    return new VirtualModelBuilder()
-        .withStorageFolder(Path.of("vsumexample"))
-        .withUserInteractorForResultProvider(new TestUserInteraction.ResultProvider(new TestUserInteraction()))
-        .withChangePropagationSpecifications(new Model2Model2ChangePropagationSpecification())
-        .buildAndInitialize();
-  }
+  public static void main(String[] args) {}
 
   private static View getDefaultView(VirtualModel vsum) {
     var selector = vsum.createSelector(ViewTypeFactory.createIdentityMappingViewType("default"));
