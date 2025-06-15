@@ -9,6 +9,7 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.vsum.VirtualModel;
+import tools.vitruv.methodologisttemplate.model.Ontology.Component;
 import tools.vitruv.methodologisttemplate.viewtype.adapters.ontology.Owl2Ecore;
 
 import java.io.File;
@@ -65,7 +66,7 @@ public class OntologyViewType extends RegistrableViewType {
     public void save(String path, VirtualModel vsum) {
         try {
             System.out.println("Saving ontology at " + IRI.create(new File(path).getAbsoluteFile()));
-            owl2Ecore.updateOntology(ontology.getOWLOntologyManager(),ontology);
+            owl2Ecore.updateOntology(ontology.getOWLOntologyManager(),ontology, getDefaultView(vsum, List.of(Component.class)).getRootObjects());
             ontology.saveOntology(IRI.create(new File(path).getAbsoluteFile()));
         } catch (OWLOntologyStorageException e) {
             throw new RuntimeException(e);

@@ -13,9 +13,7 @@ import uk.ac.manchester.cs.owl.owlapi.OWLLiteralImpl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Owl2Ecore {
 
@@ -69,13 +67,12 @@ public class Owl2Ecore {
         }
     }
 
-    public void updateOntology(OWLOntologyManager manager, OWLOntology ontology) {
+    public void updateOntology(OWLOntologyManager manager, OWLOntology ontology, Collection<EObject> instances) {
         for (OWLNamedIndividual individual : INSTANCES.keySet()) {
-            var eobject = INSTANCES.get(individual);
+            var eobject = instances.stream().filter(it -> it.eGet(getName(it)).equals(individual.getIRI().getShortForm())).toList().get(0);;
             ontology.getDataPropertyAssertionAxioms(individual).forEach(it -> {
                 var attribute = eobject.eClass().getEAllAttributes().stream().filter(its -> its.getName().equals(ATTRIBUTES.get(it.getProperty()).getName())).toList();
                 if (!eobject.eGet(attribute.get(0)).equals(it.getObject().getLiteral())) {
-                    System.out.println("Checking " + individual + " with property " + eobject.eGet(attribute.get(0)) + " " + it.getObject().getLiteral());
                     // the value of the attribute has changed, so we need to adapt it in the ontology
                     updateDataProperty(manager, ontology, individual,
                             it.getProperty().asOWLDataProperty(),
@@ -84,7 +81,9 @@ public class Owl2Ecore {
             });
         }
     }
-
+    private EStructuralFeature getName(EObject eObject) {
+        return eObject.eClass().getEAllAttributes().stream().filter(it -> it.getName().equals("name")).toList().get(0);
+    }
 
     public void updateDataProperty(OWLOntologyManager manager, OWLOntology ontology,
                                    OWLNamedIndividual individual, OWLDataProperty property, OWLLiteral newValue) {

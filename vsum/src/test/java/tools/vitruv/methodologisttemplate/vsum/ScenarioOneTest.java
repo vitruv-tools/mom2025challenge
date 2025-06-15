@@ -55,7 +55,5 @@ public class ScenarioOneTest extends AbstractVSUMExampleTest{
     // and save the new view versions
     ontologyviewtype.save("target/test/vsumexport/ontology_1.1.owl", vsum);
     systemviewtype.save("target/test/vsumexport/system_config1_1.json", vsum);
-    saveResources(vsum, "target/test/vsumexport/sd_1.1.xmi", Configuration.class);
-    saveResources(vsum, "target/test/vsumexport/pc_1.1.xmi", Component.class);
   }
 }
