@@ -52,7 +52,7 @@ public class ScenarioOneTest extends AbstractVSUMExampleTest{
       var component = config.getComponents().stream().filter(cmp -> cmp.getId().equals("T001")).toList().get(0);
       return component.getMass_kg() - 165.0 < 0.00001 && config.getMass_kg() - 355.4 < 0.00001;
     });
-    // and save the new view versions
+    // and save the new view versions for possible manual inspection
     ontologyviewtype.save("target/test/vsumexport/ontology_1.1.owl", vsum);
     systemviewtype.save("target/test/vsumexport/system_config1_1.json", vsum);
   }
