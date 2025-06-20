@@ -24,7 +24,7 @@ import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configurati
  */
 public class ScenarioOneTest extends AbstractVSUMExampleTest{
 
-  // @Test
+  @Test
   void test(@TempDir Path tempDir) throws Exception {
     VirtualModel vsum = createDefaultVirtualModel(tempDir);
     var ontologyviewtype = getOntologyViewType(vsum);

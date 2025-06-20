@@ -23,8 +23,8 @@ public class ScenarioTwoTest extends AbstractVSUMExampleTest {
         requirementsviewtype.register(vsum, "resources/requirements_specification/requirements.csv", tempDir);
         var reportviewtype = getReportViewType(vsum);
         // save the report view for automatic (and potential manual) inspection
-        reportviewtype.save("target/test/vsumexport/report.md", vsum);
-        var content = Files.readAllLines(Path.of("target/test/vsumexport/report.md"));
+        reportviewtype.save(tempDir.toString() + "/report.md", vsum);
+        var content = Files.readAllLines(Path.of(tempDir.toString() + "/report.md"));
         
         // lines 22 and 23 should contain |SATISFIED| and line 29 **SATISFIED**
         assertTrue(content.get(REQUIREMENT_1_LINE).contains("|SATISFIED|"));
@@ -33,8 +33,8 @@ public class ScenarioTwoTest extends AbstractVSUMExampleTest {
        
         modificationScenarioOne(vsum);
         // save the report view for automatic (and potential manual) inspection
-        reportviewtype.save("target/test/vsumexport/report1.1.md", vsum);
-        content = Files.readAllLines(Path.of("target/test/vsumexport/report1.1.md"));
+        reportviewtype.save(tempDir.toString() + "/report1.1.md", vsum);
+        content = Files.readAllLines(Path.of(tempDir.toString() + "/report1.1.md"));
         
         // lines 22 should contain |NOT SATISFIED| and line 23 |SATISFIED| and line 29 **NOT SATISFIED**
         assertTrue(content.get(REQUIREMENT_1_LINE).contains("|NOT SATISFIED|"));
