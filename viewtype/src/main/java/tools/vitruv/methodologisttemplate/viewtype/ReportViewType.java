@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ReportViewType extends SaveableViewType {
 
@@ -60,17 +61,23 @@ public class ReportViewType extends SaveableViewType {
         var requirements = getDefaultView(vsum, List.of(Requirement.class)).getRootObjects(Requirement.class).stream().toList();
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEEE, MMMM dd, yyyy HH:mm:ss"));
 
+        var req = new java.util.ArrayList<>(requirements.stream().map(it -> {
+                    return "|" + it.getRequirementID()
+                            + "|" + it.getDescription() + "|" + it.getConstraint().getParameter()
+                            + "|" + it.getConstraint().getOperator() + "|" + it.getConstraint().getValue()
+                            + "|" + it.getConstraint().getUnit() + "|" + (verifyRequirement(it, configuration) ? "SATISFIED" : "NOT SATISFIED") + "|";
+                })
+                .toList());
+        req.sort(String::compareTo);
+        var req_output = req.stream().collect(Collectors.joining(System.lineSeparator()));
+
         var content = REPORT_CONTENT.formatted(formattedDateTime,
                 configuration.getId(), configuration.getDescription(),
                 configuration.getComponents().stream().map(it -> {
                     return "\t - " + it.getName() + " (" + it.getId() + "):" + it.getQuantity() + " unit(s) at " + it.getMass_kg() + " kg/unit";
-                }).reduce((a, b) -> a+System.lineSeparator()+b).get(),
+                }).collect(Collectors.joining(System.lineSeparator())),
                 configuration.getMass_kg(),
-                requirements.stream().map(it -> {return "|" + it.getRequirementID()
-                        + "|" + it.getDescription() + "|" + it.getConstraint().getParameter()
-                        + "|" +  it.getConstraint().getOperator() + "|" +  it.getConstraint().getValue()
-                        + "|" + it.getConstraint().getUnit() + "|" + (verifyRequirement(it, configuration)? "SATISFIED" : "NOT SATISFIED") + "|";})
-                        .reduce((a, b) -> a+System.lineSeparator()+b).get(),
+                req_output,
                 requirements.stream().map(it -> verifyRequirement(it, configuration)).reduce((a, b) -> a && b).get() ? "SATISFIED" : "NOT SATISFIED"
         );
         try {

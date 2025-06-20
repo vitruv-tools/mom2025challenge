@@ -13,8 +13,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ScenarioTwoTest extends AbstractVSUMExampleTest {
-    private static final int REQUIREMENT_1_LINE = 23;
-    private static final int REQUIREMENT_2_LINE = 22;
+    private static final int REQUIREMENT_1_LINE = 22;
+    private static final int REQUIREMENT_2_LINE = 23;
     private static final int SATISFIED_LINE = 29;
 
     @Test
