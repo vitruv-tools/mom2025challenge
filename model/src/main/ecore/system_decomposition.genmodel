@@ -10,6 +10,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute system_decomposition.ecore#//Component/quantity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute system_decomposition.ecore#//Component/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute system_decomposition.ecore#//Component/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference system_decomposition.ecore#//Component/configuration"/>
     </genClasses>
     <genClasses ecoreClass="system_decomposition.ecore#//Configuration">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference system_decomposition.ecore#//Configuration/components"/>
