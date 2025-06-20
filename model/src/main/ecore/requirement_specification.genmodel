@@ -5,9 +5,12 @@
     modelPluginID="tools.vitruv.methodologisttemplate.model" modelName="Requirement_Specification"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="17.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
-  
   <foreignModel>requirement_Specification.ecore</foreignModel>
   <testsDirectory xsi:nil="true"/>
-  <genPackages prefix="Requirement_Specification" disposableProviderFactory="true"
-      ecorePackage="requirement_Specification.ecore#/" basePackage="tools.vitruv.methodologisttemplate.model"/>
+  <genPackages prefix="Requirement_Specification" disposableProviderFactory="true" ecorePackage="requirement_specification.ecore#/" basePackage="tools.vitruv.methodologisttemplate.model">
+    <genClasses ecoreClass="requirement_specification.ecore#//Requirement">
+    </genClasses>
+    <genClasses ecoreClass="requirement_specification.ecore#//Constraint">
+    </genClasses>
+  </genPackages>
 </genmodel:GenModel>

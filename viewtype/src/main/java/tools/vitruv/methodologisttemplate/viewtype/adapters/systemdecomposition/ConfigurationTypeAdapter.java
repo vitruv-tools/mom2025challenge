@@ -48,12 +48,12 @@ public class ConfigurationTypeAdapter implements JsonDeserializer<Configuration>
 
         // Parse component field.
         var componentArray = object.get("components").getAsJsonArray();
-        var components = componentArray.asList().stream().map(this::deserializeComponent).toList();
+        var components = componentArray.asList().stream().map(jsonComponent -> deserializeComponent(jsonComponent, configuration)).toList();
         configuration.getComponents().addAll(components);
         return configuration;
     }
 
-    private Component deserializeComponent(JsonElement json) {
+    private Component deserializeComponent(JsonElement json, Configuration config) {
         // Assume we get an object:
         var object = json.getAsJsonObject();
         // Call the factory, create a component.
@@ -65,10 +65,13 @@ public class ConfigurationTypeAdapter implements JsonDeserializer<Configuration>
         component.setType(object.get(ConfigurationTypeAdapter.COMPONENT_TYPE).getAsString());
         component.setQuantity(object.get(ConfigurationTypeAdapter.COMPONENT_QUANTITY).getAsLong());
         component.setMass_kg(object.get(ConfigurationTypeAdapter.COMPONENT_MASS).getAsDouble());
+
+        // Add reverse reference.
+        component.setConfiguration(config);
         return component;
     }
 
-   @Override
+    @Override
     public JsonElement serialize(Configuration config, Type typeOfSrc, JsonSerializationContext context) {
         // Create the main configuration object.
         var configObject = new JsonObject();
