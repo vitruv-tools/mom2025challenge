@@ -13,6 +13,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ScenarioTwoTest extends AbstractVSUMExampleTest {
+    private static final int REQUIREMENT_1_LINE = 23;
+    private static final int REQUIREMENT_2_LINE = 22;
+    private static final int SATISFIED_LINE = 29;
+
     @Test
     void test(@TempDir Path tempDir) throws Exception {
         VirtualModel vsum = createDefaultVirtualModel(tempDir);
@@ -26,21 +30,20 @@ public class ScenarioTwoTest extends AbstractVSUMExampleTest {
         // save the report view for automatic (and potential manual) inspection
         reportviewtype.save("target/test/vsumexport/report.md", vsum);
         var content = Files.readAllLines(Path.of("target/test/vsumexport/report.md"));
+        
         // lines 22 and 23 should contain |SATISFIED| and line 29 **SATISFIED**
-        assertTrue(
-                content.get(22).contains("|SATISFIED|") &&
-                        content.get(23).contains("|SATISFIED|") &&
-                        content.get(29).contains("**SATISFIED**")
-        );
+        assertTrue(content.get(REQUIREMENT_1_LINE).contains("|SATISFIED|"));
+        assertTrue(content.get(REQUIREMENT_2_LINE).contains("|SATISFIED|"));
+        assertTrue(content.get(SATISFIED_LINE).contains("**SATISFIED**"));
+       
         modificationScenarioOne(vsum);
         // save the report view for automatic (and potential manual) inspection
         reportviewtype.save("target/test/vsumexport/report1.1.md", vsum);
         content = Files.readAllLines(Path.of("target/test/vsumexport/report1.1.md"));
+        
         // lines 22 should contain |NOT SATISFIED| and line 23 |SATISFIED| and line 29 **NOT SATISFIED**
-        assertTrue(
-                content.get(22).contains("|NOT SATISFIED|") &&
-                        content.get(23).contains("|SATISFIED|") &&
-                        content.get(29).contains("**NOT SATISFIED**")
-        );
+        assertTrue(content.get(REQUIREMENT_1_LINE).contains("|NOT SATISFIED|"));
+        assertTrue(content.get(REQUIREMENT_2_LINE).contains("|SATISFIED|"));
+        assertTrue(content.get(SATISFIED_LINE).contains("**NOT SATISFIED**"));
     }
 }

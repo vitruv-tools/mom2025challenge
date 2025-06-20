@@ -7,10 +7,13 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" lowerBound="1"
+        eType="#//Configuration" eOpposite="#//Configuration/components"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Configuration" eSuperTypes="#//CommonSystemBase">
     <eStructuralFeatures xsi:type="ecore:EReference" name="components" ordered="false"
-        upperBound="-1" eType="#//Component" containment="true" eKeys="#//CommonSystemBase/id"/>
+        upperBound="-1" eType="#//Component" containment="true" eOpposite="#//Component/configuration"
+        eKeys="#//CommonSystemBase/id"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>

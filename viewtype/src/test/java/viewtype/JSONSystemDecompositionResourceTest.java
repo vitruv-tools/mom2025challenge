@@ -98,5 +98,6 @@ class JSONSystemDecompositionResourceTest {
         Assertions.assertEquals(type, component.getType());
         Assertions.assertEquals(quantity, component.getQuantity());
         Assertions.assertEquals(massPerUnit, component.getMass_kg());
+        Assertions.assertEquals(config, component.getConfiguration());
     }
 }

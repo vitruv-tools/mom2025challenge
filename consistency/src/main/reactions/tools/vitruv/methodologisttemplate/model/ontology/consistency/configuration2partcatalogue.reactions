@@ -38,6 +38,7 @@ routine changeMass(sd::Component component) {
         if (pc_component.hasMass != component.mass_kg){
             pc_component.hasMass = component.mass_kg
         }
-        (component.eContainer as tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration).mass_kg = (component.eContainer as tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration).components.map[mass_kg * quantity].reduce[p1, p2 | p1 + p2]
+        val configuration = component.configuration;
+        configuration.mass_kg = configuration.components.map[mass_kg * quantity].reduce[p1, p2 | p1 + p2]
     }
 }
