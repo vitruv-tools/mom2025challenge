@@ -1,4 +1,4 @@
-package tools.vitruv.methodologisttemplate.viewtype.adapters.ontology;
+package tools.vitruv.methodologisttemplate.model.ontology;
 
 import org.eclipse.emf.codegen.ecore.genmodel.*;
 import org.eclipse.emf.common.util.BasicMonitor;

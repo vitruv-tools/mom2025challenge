@@ -1,4 +1,4 @@
-package viewtype;
+package tools.vitruv.momchallenge.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import tools.vitruv.methodologisttemplate.model.requirement_specification.Constraint;
 import tools.vitruv.methodologisttemplate.model.requirement_specification.Requirement;
-import tools.vitruv.methodologisttemplate.viewtype.adapters.csv.CSVRequirementSpecificationResourceFactory;
+import tools.vitruv.methodologisttemplate.model.csv.CSVRequirementSpecificationResourceFactory;
 
 /**
  * Round-trip test for CSVRequirementSpecificationResource

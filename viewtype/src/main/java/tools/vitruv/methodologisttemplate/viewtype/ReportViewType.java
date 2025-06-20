@@ -9,7 +9,9 @@ import tools.vitruv.methodologisttemplate.model.requirement_specification.Requir
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -81,7 +83,7 @@ public class ReportViewType extends SaveableViewType {
                 requirements.stream().map(it -> verifyRequirement(it, configuration)).reduce((a, b) -> a && b).get() ? "SATISFIED" : "NOT SATISFIED"
         );
         try {
-            Files.write(Path.of(new File(path).getAbsolutePath()), content.getBytes());
+            Files.write(Path.of(new File(path).getAbsolutePath()), content.getBytes(), StandardOpenOption.CREATE);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

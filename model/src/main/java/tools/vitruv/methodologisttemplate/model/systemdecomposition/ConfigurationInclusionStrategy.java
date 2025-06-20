@@ -1,4 +1,4 @@
-package tools.vitruv.methodologisttemplate.viewtype.adapters.systemdecomposition;
+package tools.vitruv.methodologisttemplate.model.systemdecomposition;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;

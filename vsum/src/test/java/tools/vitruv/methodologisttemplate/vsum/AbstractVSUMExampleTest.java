@@ -2,6 +2,7 @@ package tools.vitruv.methodologisttemplate.vsum;
 
 import mir.reactions.pc2sd.Pc2sdChangePropagationSpecification;
 import mir.reactions.sd2pc.Sd2pcChangePropagationSpecification;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -17,13 +18,10 @@ import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.framework.vsum.VirtualModelBuilder;
 import tools.vitruv.framework.vsum.internal.InternalVirtualModel;
 import tools.vitruv.methodologisttemplate.model.Ontology.Component;
-import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
 import tools.vitruv.methodologisttemplate.viewtype.OntologyViewType;
 import tools.vitruv.methodologisttemplate.viewtype.ReportViewType;
 import tools.vitruv.methodologisttemplate.viewtype.RequirementsViewType;
 import tools.vitruv.methodologisttemplate.viewtype.SystemDecompositionViewType;
-import tools.vitruv.methodologisttemplate.viewtype.adapters.csv.CSVRequirementSpecificationResourceFactory;
-import tools.vitruv.methodologisttemplate.viewtype.adapters.systemdecomposition.JSONSystemDecompositionResourceFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;

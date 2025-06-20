@@ -1,4 +1,4 @@
-package tools.vitruv.methodologisttemplate.viewtype.adapters.csv;
+package tools.vitruv.methodologisttemplate.model.csv;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

@@ -7,10 +7,11 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
+
+import tools.vitruv.methodologisttemplate.model.ontology.Owl2Ecore;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.methodologisttemplate.model.Ontology.Component;
-import tools.vitruv.methodologisttemplate.viewtype.adapters.ontology.Owl2Ecore;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package viewtype.ontology;
+package tools.vitruv.momchallenge.model;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -9,7 +9,8 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-import tools.vitruv.methodologisttemplate.viewtype.adapters.ontology.Owl2Ecore;
+
+import tools.vitruv.methodologisttemplate.model.ontology.Owl2Ecore;
 
 import java.io.File;
 import java.io.IOException;

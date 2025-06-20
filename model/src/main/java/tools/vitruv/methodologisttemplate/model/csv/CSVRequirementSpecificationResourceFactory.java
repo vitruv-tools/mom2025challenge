@@ -1,4 +1,4 @@
-package tools.vitruv.methodologisttemplate.viewtype.adapters.csv;
+package tools.vitruv.methodologisttemplate.model.csv;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;

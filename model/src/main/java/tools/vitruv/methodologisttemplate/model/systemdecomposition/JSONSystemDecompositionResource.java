@@ -1,4 +1,4 @@
-package tools.vitruv.methodologisttemplate.viewtype.adapters.systemdecomposition;
+package tools.vitruv.methodologisttemplate.model.systemdecomposition;
 
 import java.io.IOException;
 import java.io.InputStream;

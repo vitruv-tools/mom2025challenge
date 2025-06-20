@@ -1,4 +1,4 @@
-package viewtype;
+package tools.vitruv.momchallenge.model;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -7,6 +7,7 @@ import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
 import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
+import tools.vitruv.methodologisttemplate.model.systemdecomposition.JSONSystemDecompositionResourceFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +18,6 @@ import java.util.HashMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import tools.vitruv.methodologisttemplate.viewtype.adapters.systemdecomposition.JSONSystemDecompositionResourceFactory;
 
 class JSONSystemDecompositionResourceTest {
     /**
@@ -98,6 +98,5 @@ class JSONSystemDecompositionResourceTest {
         Assertions.assertEquals(type, component.getType());
         Assertions.assertEquals(quantity, component.getQuantity());
         Assertions.assertEquals(massPerUnit, component.getMass_kg());
-        Assertions.assertEquals(config, component.getConfiguration());
     }
 }

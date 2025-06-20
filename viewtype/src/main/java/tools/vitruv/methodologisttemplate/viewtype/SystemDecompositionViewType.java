@@ -4,11 +4,12 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+
+import tools.vitruv.methodologisttemplate.model.systemdecomposition.JSONSystemDecompositionResourceFactory;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.views.impl.IdentityMappingViewType;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
-import tools.vitruv.methodologisttemplate.viewtype.adapters.systemdecomposition.JSONSystemDecompositionResourceFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;

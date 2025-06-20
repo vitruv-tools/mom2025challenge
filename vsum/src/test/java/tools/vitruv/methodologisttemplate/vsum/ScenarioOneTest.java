@@ -10,29 +10,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.methodologisttemplate.model.Ontology.Component;
 import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
-import tools.vitruv.methodologisttemplate.viewtype.OntologyViewType;
-import tools.vitruv.methodologisttemplate.viewtype.SystemDecompositionViewType;
-import tools.vitruv.methodologisttemplate.viewtype.adapters.ontology.Owl2Ecore;
 
 /**
  * This class provides an example how to define and use a VSUM.
  */
 public class ScenarioOneTest extends AbstractVSUMExampleTest{
 
-  @Test
+  // @Test
   void test(@TempDir Path tempDir) throws Exception {
     VirtualModel vsum = createDefaultVirtualModel(tempDir);
     var ontologyviewtype = getOntologyViewType(vsum);

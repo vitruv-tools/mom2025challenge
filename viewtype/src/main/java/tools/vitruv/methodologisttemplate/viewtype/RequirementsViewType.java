@@ -4,12 +4,13 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+
+import tools.vitruv.methodologisttemplate.model.csv.CSVRequirementSpecificationResourceFactory;
 import tools.vitruv.framework.views.CommittableView;
 import tools.vitruv.framework.vsum.VirtualModel;
 import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
 import tools.vitruv.methodologisttemplate.model.requirement_specification.Constraint;
 import tools.vitruv.methodologisttemplate.model.requirement_specification.Requirement;
-import tools.vitruv.methodologisttemplate.viewtype.adapters.csv.CSVRequirementSpecificationResourceFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;

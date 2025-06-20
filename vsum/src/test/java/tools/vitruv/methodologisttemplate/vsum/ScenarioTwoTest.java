@@ -3,13 +3,8 @@ package tools.vitruv.methodologisttemplate.vsum;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import tools.vitruv.framework.vsum.VirtualModel;
-import tools.vitruv.methodologisttemplate.model.Ontology.Component;
-import tools.vitruv.methodologisttemplate.model.System_Decomposition.Configuration;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ScenarioTwoTest extends AbstractVSUMExampleTest {
