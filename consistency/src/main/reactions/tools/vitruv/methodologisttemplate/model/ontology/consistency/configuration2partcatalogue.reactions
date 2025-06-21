@@ -10,7 +10,10 @@ execute actions in pc
 
 reaction ComponentInsertedAsRoot {
 	after element sd::Component inserted in sd::Configuration[components]
-	call registerCorrespondence(newValue)
+	call {
+        registerCorrespondence(newValue)
+        updateMassOfConfiguration(newValue)
+    }
 }
 
 routine registerCorrespondence(sd::Component cmp) {
@@ -30,6 +33,7 @@ reaction MassChange {
     after attribute replaced at sd::Component[mass_kg]
     call changeMass(affectedEObject)
 }
+
 routine changeMass(sd::Component component) {
     match {
         val pc_component = retrieve pc::Component corresponding to component
@@ -38,6 +42,12 @@ routine changeMass(sd::Component component) {
         if (pc_component.hasMass != component.mass_kg){
             pc_component.hasMass = component.mass_kg
         }
+        updateMassOfConfiguration(component)
+    }
+}
+
+routine updateMassOfConfiguration(sd::Component component) {
+    update {
         val configuration = component.configuration;
         configuration.mass_kg = configuration.components.map[mass_kg * quantity].reduce[p1, p2 | p1 + p2]
     }
