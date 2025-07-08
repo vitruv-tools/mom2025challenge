@@ -1,0 +1,233 @@
+import "https://mom2025.wp.imt.fr/mom-challenge/system_decomposition" as system
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: systemDecomp2PCM
+in reaction to changes in system
+execute actions in pcm
+
+// ################ CONFIGURATION REACTIONS ################
+reaction ConfigurationCreated {
+    after element system::Configuration inserted as root
+    call createPCMRepository(newValue)
+}
+
+routine createPCMRepository(system::Configuration configuration) {
+    create {
+        val pcmRepository = new pcm::Repository
+    }
+    update {
+        pcmRepository.entityName = if (configuration.description !== null && configuration.description.length > 0) {
+            configuration.description.toFirstUpper
+        } else {
+            "SystemRepository"
+        }
+        pcmRepository.repositoryDescription = configuration.description
+        addCorrespondenceBetween(pcmRepository, configuration)
+        
+        // Create components for existing components in configuration
+        for (component : configuration.components) {
+            createPCMBasicComponentFromConfiguration(component, pcmRepository)
+        }
+    }
+}
+
+reaction ConfigurationDeleted {
+    after element system::Configuration deleted
+    call deletePCMRepository(affectedEObject)
+}
+
+routine deletePCMRepository(system::Configuration configuration) {
+    match {
+        val pcmRepository = retrieve pcm::Repository corresponding to configuration
+    }
+    update {
+        removeObject(pcmRepository)
+        removeCorrespondenceBetween(configuration, pcmRepository)
+    }
+}
+
+reaction ConfigurationDescriptionChanged {
+    after attribute replaced at system::Configuration[description]
+    call updateRepositoryDescription(affectedEObject)
+}
+
+routine updateRepositoryDescription(system::Configuration configuration) {
+    match {
+        val pcmRepository = retrieve pcm::Repository corresponding to configuration
+    }
+    update {
+        pcmRepository.repositoryDescription = configuration.description
+        if (configuration.description !== null && configuration.description.length > 0) {
+            pcmRepository.entityName = configuration.description.toFirstUpper
+        }
+    }
+}
+
+// ################ COMPONENT REACTIONS ################
+reaction ComponentCreated {
+    after element system::Component inserted in system::Configuration[components]
+    call createPCMBasicComponentInConfiguration(newValue, affectedEObject)
+}
+
+routine createPCMBasicComponentInConfiguration(system::Component component, system::Configuration configuration) {
+    match {
+        val pcmRepository = retrieve pcm::Repository corresponding to configuration
+        require absence of pcm::BasicComponent corresponding to component
+    }
+    create {
+        val pcmBasicComponent = new pcm::BasicComponent
+    }
+    update {
+        pcmBasicComponent.entityName = component.name.toFirstUpper
+        pcmBasicComponent.repository__RepositoryComponent = pcmRepository
+        pcmRepository.components__Repository += pcmBasicComponent
+        addCorrespondenceBetween(pcmBasicComponent, component)
+    }
+}
+
+routine createPCMBasicComponentFromConfiguration(system::Component component, pcm::Repository pcmRepository) {
+    match {
+        require absence of pcm::BasicComponent corresponding to component
+    }
+    create {
+        val pcmBasicComponent = new pcm::BasicComponent
+    }
+    update {
+        pcmBasicComponent.entityName = component.name.toFirstUpper
+        pcmBasicComponent.repository__RepositoryComponent = pcmRepository
+        pcmRepository.components__Repository += pcmBasicComponent
+        addCorrespondenceBetween(pcmBasicComponent, component)
+    }
+}
+
+reaction ComponentDeleted {
+    after element system::Component deleted
+    call deletePCMBasicComponent(affectedEObject)
+}
+
+routine deletePCMBasicComponent(system::Component component) {
+    match {
+        val pcmBasicComponent = retrieve pcm::BasicComponent corresponding to component
+    }
+    update {
+        removeObject(pcmBasicComponent)
+        removeCorrespondenceBetween(component, pcmBasicComponent)
+    }
+}
+
+reaction ComponentNameChanged {
+    after attribute replaced at system::Component[name]
+    call updateComponentName(affectedEObject)
+}
+
+routine updateComponentName(system::Component component) {
+    match {
+        val pcmBasicComponent = retrieve pcm::BasicComponent corresponding to component
+    }
+    update {
+        pcmBasicComponent.entityName = component.name.toFirstUpper
+    }
+}
+
+reaction ComponentTypeChanged {
+    after attribute replaced at system::Component[type]
+    call updateComponentType(affectedEObject)
+}
+
+routine updateComponentType(system::Component component) {
+    match {
+        val pcmBasicComponent = retrieve pcm::BasicComponent corresponding to component
+    }
+    update {
+        // The component type information could be stored as a tag or in component name
+        // For now, we update the component name to include the type
+        val typeSuffix = if (component.type !== null && component.type.length > 0) {
+            "_" + component.type
+        } else {
+            ""
+        }
+        pcmBasicComponent.entityName = component.name.toFirstUpper + typeSuffix
+    }
+}
+
+reaction ComponentQuantityChanged {
+    after attribute replaced at system::Component[quantity]
+    call updateComponentQuantity(affectedEObject)
+}
+
+routine updateComponentQuantity(system::Component component) {
+    // Quantity changes don't directly map to PCM BasicComponent properties
+    // This could be handled by creating multiple instances or storing as metadata
+    // For now, we'll add it as a suffix to the name
+    match {
+        val pcmBasicComponent = retrieve pcm::BasicComponent corresponding to component
+    }
+    update {
+        val quantitySuffix = if (component.quantity > 1) {
+            "_x" + component.quantity
+        } else {
+            ""
+        }
+        val baseName = component.name.toFirstUpper
+        val typeSuffix = if (component.type !== null && component.type.length > 0) {
+            "_" + component.type
+        } else {
+            ""
+        }
+        pcmBasicComponent.entityName = baseName + typeSuffix + quantitySuffix
+    }
+}
+
+// ################ MASS CHANGES ################
+reaction ComponentMassChanged {
+    after attribute replaced at system::Component[mass_kg]
+    call updateComponentMass(affectedEObject)
+}
+
+routine updateComponentMass(system::Component component) {
+    // Mass doesn't directly map to PCM, but we could store it as component parameter
+    // For now, this is just a placeholder - mass information could be stored as metadata
+    match {
+        val pcmBasicComponent = retrieve pcm::BasicComponent corresponding to component
+    }
+    update {
+        // PCM doesn't have a direct mass attribute, so this is mainly for correspondence tracking
+        // In a real implementation, this might be stored as a component parameter or annotation
+    }
+}
+
+reaction ConfigurationMassChanged {
+    after attribute replaced at system::Configuration[mass_kg]
+    call updateConfigurationMass(affectedEObject)
+}
+
+routine updateConfigurationMass(system::Configuration configuration) {
+    // Similar to component mass, configuration mass doesn't directly map to PCM Repository
+    match {
+        val pcmRepository = retrieve pcm::Repository corresponding to configuration
+    }
+    update {
+        // Mass information could be stored in repository description or as metadata
+        val massInfo = " (Total Mass: " + configuration.mass_kg + " kg)"
+        if (pcmRepository.repositoryDescription !== null) {
+            if (!pcmRepository.repositoryDescription.contains("(Total Mass:")) {
+                pcmRepository.repositoryDescription = pcmRepository.repositoryDescription + massInfo
+            } else {
+                // Update existing mass information - simple replacement approach
+                val description = pcmRepository.repositoryDescription
+                val startIndex = description.indexOf("(Total Mass:")
+                if (startIndex >= 0) {
+                    val endIndex = description.indexOf(")", startIndex)
+                    if (endIndex >= 0) {
+                        val newDescription = description.substring(0, startIndex) + 
+                                           massInfo.substring(1) + // remove leading space
+                                           description.substring(endIndex + 1)
+                        pcmRepository.repositoryDescription = newDescription
+                    }
+                }
+            }
+        } else {
+            pcmRepository.repositoryDescription = "System Configuration" + massInfo
+        }
+    }
+}

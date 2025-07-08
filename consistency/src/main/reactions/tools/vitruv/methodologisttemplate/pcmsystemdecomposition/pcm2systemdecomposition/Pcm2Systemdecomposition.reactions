@@ -1,0 +1,312 @@
+import "https://mom2025.wp.imt.fr/mom-challenge/system_decomposition" as sysDecomp
+import "http://palladiosimulator.org/PalladioComponentModel/5.2" as pcm
+
+reactions: pcm2sysDecomp
+in reaction to changes in pcm
+execute actions in sysDecomp
+
+// ################################################################################
+// ############################# REPOSITORY REACTIONS ############################
+
+reaction RepositoryCreated {
+	after element pcm::Repository inserted as root
+	call createConfiguration(newValue)
+}
+
+routine createConfiguration(pcm::Repository pcmRepository) {
+	create {
+		val configuration = new sysDecomp::Configuration
+	}
+	update {
+		configuration.id = if (pcmRepository.id !== null) pcmRepository.id else pcmRepository.entityName
+		configuration.description = "Configuration for " + pcmRepository.entityName
+		configuration.mass_kg = 0.0
+		
+		addCorrespondenceBetween(configuration, pcmRepository)
+		persistProjectRelative(pcmRepository, configuration, "model/" + configuration.id + ".sysdecomp")
+	}
+}
+
+reaction RepositoryRenamed {
+	after attribute replaced at pcm::Repository[entityName]
+	call updateConfigurationFromRepository(affectedEObject)
+}
+
+routine updateConfigurationFromRepository(pcm::Repository pcmRepository) {
+	match {
+		val configuration = retrieve sysDecomp::Configuration corresponding to pcmRepository
+	}
+	update {
+		configuration.id = pcmRepository.entityName
+		configuration.description = "Configuration for " + pcmRepository.entityName
+	}
+}
+
+reaction RepositoryDeleted {
+	after element pcm::Repository deleted
+	call removeConfiguration(affectedEObject)
+}
+
+routine removeConfiguration(pcm::Repository pcmRepository) {
+	match {
+		val configuration = retrieve sysDecomp::Configuration corresponding to pcmRepository
+	}
+	update {
+		removeObject(configuration)
+		removeCorrespondenceBetween(pcmRepository, configuration)
+	}
+}
+
+// ################################################################################
+// ############################# COMPONENT REACTIONS #############################
+
+reaction ComponentCreated {
+	after element pcm::RepositoryComponent inserted in pcm::Repository[components__Repository]
+	call createComponent(newValue, affectedEObject)
+}
+
+routine createComponent(pcm::RepositoryComponent pcmComponent, pcm::Repository pcmRepository) {
+	match {
+		val configuration = retrieve sysDecomp::Configuration corresponding to pcmRepository
+	}
+	create {
+		val component = new sysDecomp::Component
+	}
+	update {
+		component.id = if (pcmComponent.id !== null) pcmComponent.id else pcmComponent.entityName
+		component.name = pcmComponent.entityName
+		component.type = "RepositoryComponent"
+		component.quantity = 1
+		
+		// Calculate component mass based on general component properties
+		var mass = 1.0
+		
+		// Try to access common properties that might exist
+		try {
+			if (pcmComponent.providedRoles_InterfaceProvidingEntity !== null) {
+				mass = mass + pcmComponent.providedRoles_InterfaceProvidingEntity.size() * 0.5
+			}
+		} catch (Exception e) {
+			// Property not available, ignore
+		}
+		
+		try {
+			if (pcmComponent.requiredRoles_InterfaceRequiringEntity !== null) {
+				mass = mass + pcmComponent.requiredRoles_InterfaceRequiringEntity.size() * 0.3
+			}
+		} catch (Exception e) {
+			// Property not available, ignore
+		}
+		
+		component.mass_kg = mass
+		
+		configuration.components += component
+		addCorrespondenceBetween(component, pcmComponent)
+	}
+}
+
+reaction ComponentRenamed {
+	after attribute replaced at pcm::RepositoryComponent[entityName]
+	call updateComponentFromPCM(affectedEObject)
+}
+
+routine updateComponentFromPCM(pcm::RepositoryComponent pcmComponent) {
+	match {
+		val component = retrieve sysDecomp::Component corresponding to pcmComponent
+	}
+	update {
+		component.name = pcmComponent.entityName
+		component.id = pcmComponent.entityName
+		
+		// Recalculate mass
+		var mass = 1.0
+		
+		try {
+			if (pcmComponent.providedRoles_InterfaceProvidingEntity !== null) {
+				mass = mass + pcmComponent.providedRoles_InterfaceProvidingEntity.size() * 0.5
+			}
+		} catch (Exception e) {
+			// Property not available, ignore
+		}
+		
+		try {
+			if (pcmComponent.requiredRoles_InterfaceRequiringEntity !== null) {
+				mass = mass + pcmComponent.requiredRoles_InterfaceRequiringEntity.size() * 0.3
+			}
+		} catch (Exception e) {
+			// Property not available, ignore
+		}
+		
+		component.mass_kg = mass
+	}
+}
+
+reaction ComponentDeleted {
+	after element pcm::RepositoryComponent removed from pcm::Repository[components__Repository]
+	call removeComponent(oldValue)
+}
+
+routine removeComponent(pcm::RepositoryComponent pcmComponent) {
+	match {
+		val component = retrieve sysDecomp::Component corresponding to pcmComponent
+	}
+	update {
+		removeObject(component)
+		removeCorrespondenceBetween(pcmComponent, component)
+	}
+}
+
+// ################################################################################
+// ############################# SYSTEM REACTIONS ################################
+
+reaction SystemCreated {
+	after element pcm::System inserted as root
+	call createSystemConfiguration(newValue)
+}
+
+routine createSystemConfiguration(pcm::System pcmSystem) {
+	create {
+		val configuration = new sysDecomp::Configuration
+	}
+	update {
+		configuration.id = if (pcmSystem.id !== null) pcmSystem.id else pcmSystem.entityName
+		configuration.description = "System configuration for " + pcmSystem.entityName
+		
+		// Calculate system mass
+		var totalMass = 2.0 // Base mass for system
+		
+		// Add mass for assembly contexts
+		if (pcmSystem.assemblyContexts__ComposedStructure !== null) {
+			totalMass = totalMass + pcmSystem.assemblyContexts__ComposedStructure.size() * 1.5
+		}
+		
+		// Add mass for connectors
+		if (pcmSystem.connectors__ComposedStructure !== null) {
+			totalMass = totalMass + pcmSystem.connectors__ComposedStructure.size() * 0.5
+		}
+		
+		configuration.mass_kg = totalMass
+		
+		addCorrespondenceBetween(configuration, pcmSystem)
+		persistProjectRelative(pcmSystem, configuration, "model/" + configuration.id + "_system.sysdecomp")
+		
+		// Create components for assembly contexts
+		if (pcmSystem.assemblyContexts__ComposedStructure !== null) {
+			for (assemblyContext : pcmSystem.assemblyContexts__ComposedStructure) {
+				createComponentFromAssemblyContext(assemblyContext, configuration)
+			}
+		}
+	}
+}
+
+routine createComponentFromAssemblyContext(pcm::AssemblyContext assemblyContext, sysDecomp::Configuration configuration) {
+	create {
+		val component = new sysDecomp::Component
+	}
+	update {
+		component.id = if (assemblyContext.id !== null) assemblyContext.id else assemblyContext.entityName
+		component.name = assemblyContext.entityName
+		component.type = "AssemblyContext"
+		component.quantity = 1
+		component.mass_kg = 1.5 // Base mass for assembly context
+		
+		configuration.components += component
+		addCorrespondenceBetween(component, assemblyContext)
+	}
+}
+
+reaction SystemRenamed {
+	after attribute replaced at pcm::System[entityName]
+	call updateSystemConfiguration(affectedEObject)
+}
+
+routine updateSystemConfiguration(pcm::System pcmSystem) {
+	match {
+		val configuration = retrieve sysDecomp::Configuration corresponding to pcmSystem
+	}
+	update {
+		configuration.id = pcmSystem.entityName
+		configuration.description = "System configuration for " + pcmSystem.entityName
+		
+		// Recalculate system mass
+		var totalMass = 2.0
+		
+		if (pcmSystem.assemblyContexts__ComposedStructure !== null) {
+			totalMass = totalMass + pcmSystem.assemblyContexts__ComposedStructure.size() * 1.5
+		}
+		
+		if (pcmSystem.connectors__ComposedStructure !== null) {
+			totalMass = totalMass + pcmSystem.connectors__ComposedStructure.size() * 0.5
+		}
+		
+		configuration.mass_kg = totalMass
+	}
+}
+
+reaction SystemDeleted {
+	after element pcm::System deleted
+	call removeSystemConfiguration(affectedEObject)
+}
+
+routine removeSystemConfiguration(pcm::System pcmSystem) {
+	match {
+		val configuration = retrieve sysDecomp::Configuration corresponding to pcmSystem
+	}
+	update {
+		removeObject(configuration)
+		removeCorrespondenceBetween(pcmSystem, configuration)
+	}
+}
+
+// ################################################################################
+// ######################## ASSEMBLY CONTEXT REACTIONS ###########################
+
+reaction AssemblyContextAdded {
+	after element pcm::AssemblyContext inserted in pcm::ComposedStructure[assemblyContexts__ComposedStructure]
+	call addAssemblyContextComponent(newValue, affectedEObject)
+}
+
+routine addAssemblyContextComponent(pcm::AssemblyContext assemblyContext, pcm::ComposedStructure composedStructure) {
+	match {
+		val configuration = retrieve sysDecomp::Configuration corresponding to composedStructure
+		require absence of sysDecomp::Component corresponding to assemblyContext
+	}
+	update {
+		createComponentFromAssemblyContext(assemblyContext, configuration)
+		
+		// Update total system mass
+		configuration.mass_kg = configuration.mass_kg + 1.5
+	}
+}
+
+reaction AssemblyContextRemoved {
+	after element pcm::AssemblyContext removed from pcm::ComposedStructure[assemblyContexts__ComposedStructure]
+	call removeAssemblyContextComponent(oldValue, affectedEObject)
+}
+
+routine removeAssemblyContextComponent(pcm::AssemblyContext assemblyContext, pcm::ComposedStructure composedStructure) {
+	match {
+		val component = retrieve sysDecomp::Component corresponding to assemblyContext
+		val configuration = retrieve sysDecomp::Configuration corresponding to composedStructure
+	}
+	update {
+		configuration.mass_kg = configuration.mass_kg - component.mass_kg
+		removeObject(component)
+		removeCorrespondenceBetween(assemblyContext, component)
+	}
+}
+
+reaction AssemblyContextRenamed {
+	after attribute replaced at pcm::AssemblyContext[entityName]
+	call updateAssemblyContextComponent(affectedEObject)
+}
+
+routine updateAssemblyContextComponent(pcm::AssemblyContext assemblyContext) {
+	match {
+		val component = retrieve sysDecomp::Component corresponding to assemblyContext
+	}
+	update {
+		component.name = assemblyContext.entityName
+		component.id = assemblyContext.entityName
+	}
+}
