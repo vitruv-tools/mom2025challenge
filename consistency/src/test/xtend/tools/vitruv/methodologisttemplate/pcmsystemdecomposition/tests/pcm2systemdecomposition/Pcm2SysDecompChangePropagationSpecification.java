@@ -1,0 +1,8 @@
+package tools.vitruv.methodologisttemplate.pcmsystemdecomposition.tests.pcm2systemdecomposition;
+
+
+import mir.reactions.pcm2sysDecomp.Pcm2sysDecompChangePropagationSpecification;
+
+public class Pcm2SysDecompChangePropagationSpecification extends Pcm2sysDecompChangePropagationSpecification {
+
+}
