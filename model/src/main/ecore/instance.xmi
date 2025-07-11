@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ontology="http://www.example.com/satellite">
+  <ontology:SolarPanelComponent componentID="SP001A" hasMass="75.2" name="SolarPanel_A"/>
+  <ontology:AntennaComponent componentID="ANT002" hasMass="20.0" name="CommAntenna002"/>
+  <ontology:AntennaComponent componentID="ANT001" hasMass="20.0" name="CommAntenna001"/>
+  <ontology:ThrusterComponent componentID="T001" hasMass="150.5" name="MainThruster001"/>
+  <ontology:SolarPanelComponent componentID="SP001B" hasMass="75.2" name="SolarPanel_B"/>
+</xmi:XMI>
