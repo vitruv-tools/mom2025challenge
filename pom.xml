@@ -9,7 +9,7 @@
   <parent>
     <groupId>tools.vitruv</groupId>
     <artifactId>parent</artifactId>
-    <version>3.2.0</version>
+    <version>3.3.1</version>
   </parent>
 
   <!-- Project Information -->
@@ -29,7 +29,7 @@
   </modules>
 
   <properties>
-    <vitruv.version>3.1.2</vitruv.version>
+    <vitruv.version>3.2.2</vitruv.version>
   </properties>
 
   <dependencyManagement>
