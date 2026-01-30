@@ -9,7 +9,7 @@ authors:
 - family-names : "Jiang"
   given-names: "Bowen"
   orcid: "https://orcid.org/0009-0001-8168-0866"
-  - family-names : "Lange"
+- family-names : "Lange"
   given-names: "Arne"
   orcid: "https://orcid.org/0000-0002-1776-0247"
 title: "Solution to the MoM (Model Management) 2025 solution."
