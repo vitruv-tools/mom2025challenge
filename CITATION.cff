@@ -1,5 +1,4 @@
 cff-version: 1.2.0
-
 authors:
 - family-names : "Jutz"
   given-names: "Benedikt"
@@ -13,7 +12,6 @@ authors:
   - family-names : "Lange"
   given-names: "Arne"
   orcid: "https://orcid.org/0000-0002-1776-0247"
-  
 title: "Solution to the MoM (Model Management) 2025 solution."
 version: 1.0.0
 date-released: 2025-07-11
