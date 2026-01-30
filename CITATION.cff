@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+
+authors:
+- family-names : "Jutz"
+  given-names: "Benedikt"
+  orcid: "https://orcid.org/0009-0006-2110-7159"
+- family-names : "Weber"
+  given-names: "Thomas"
+  orcid: "https://orcid.org/0009-0001-5775-2225"
+- family-names : "Jiang"
+  given-names: "Bowen"
+  orcid: "https://orcid.org/0009-0001-8168-0866"
+  - family-names : "Lange"
+  given-names: "Arne"
+  orcid: "https://orcid.org/0000-0002-1776-0247"
+  
+title: "Solution to the MoM (Model Management) 2025 solution."
+version: 1.0.0
+date-released: 2025-07-11
+url: "https://github.com/vitruv-tools/mom2025challenge"
